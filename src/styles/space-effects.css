@@ -1,0 +1,39 @@
+.space-glow {
+  box-shadow:
+    0 0 20px rgba(108, 92, 231, 0.3),
+    0 0 40px rgba(108, 92, 231, 0.1);
+}
+
+.space-glow-lg {
+  box-shadow:
+    0 0 30px rgba(108, 92, 231, 0.4),
+    0 0 60px rgba(108, 92, 231, 0.2),
+    0 0 100px rgba(108, 92, 231, 0.1);
+}
+
+.nebula-bg {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(108, 92, 231, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 107, 107, 0.08) 0%, transparent 50%);
+}
+
+.star-glow {
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
+.warp-lines {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(108, 92, 231, 0.3) 2px,
+    rgba(108, 92, 231, 0.3) 4px
+  );
+  animation: warp-move 0.5s linear infinite;
+}
+
+@keyframes warp-move {
+  0% { background-position: 0 0; }
+  100% { background-position: -4px 0; }
+}
