@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { searchIndex } from "@/lib/search-index";
-import { SearchResult } from "@/types/common";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 interface SearchOverlayProps {
@@ -10,25 +8,46 @@ interface SearchOverlayProps {
   onClose: () => void;
 }
 
-function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
+const searchItems = [
+  { title: "Solar System Explorer", href: "/solar-system", category: "Explore", icon: "🪐" },
+  { title: "Space Travel", href: "/space-travel", category: "Experience", icon: "🚀" },
+  { title: "Star Catalog", href: "/star-catalog", category: "Discover", icon: "⭐" },
+  { title: "Star Chart", href: "/star-chart", category: "Discover", icon: "🗺️" },
+  { title: "Galaxy Explorer", href: "/galaxy-explorer", category: "Discover", icon: "🌌" },
+  { title: "Galaxy Mapper", href: "/galaxy-mapper", category: "Discover", icon: "🔍" },
+  { title: "Nebula Explorer", href: "/nebula-explorer", category: "Discover", icon: "☁️" },
+  { title: "Nebula Viewer", href: "/nebula-viewer", category: "Experience", icon: "🎨" },
+  { title: "Black Hole Visualizer", href: "/black-hole-visualizer", category: "Experience", icon: "🕳️" },
+  { title: "Exoplanet Explorer", href: "/exoplanet-explorer", category: "Discover", icon: "🌍" },
+  { title: "Constellation Map", href: "/constellation-map", category: "Learn", icon: "✨" },
+  { title: "Cosmic Timeline", href: "/cosmic-timeline", category: "Learn", icon: "⏳" },
+  { title: "Space Missions", href: "/missions", category: "Learn", icon: "🛰️" },
+  { title: "My Profile", href: "/profile", category: "Account", icon: "🧑‍🚀" },
+];
+
+export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = query
+    ? searchItems.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.category.toLowerCase().includes(query.toLowerCase())
+      )
+    : searchItems;
 
   useEffect(() => {
-    if (query.length > 1) {
-      setResults(searchIndex(query));
-    } else {
-      setResults([]);
+    if (isOpen) {
+      setQuery("");
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
-  }, [query]);
+  }, [isOpen]);
 
   useEffect(() => {
+    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        if (isOpen) onClose();
-      }
-      if (e.key === "Escape" && isOpen) onClose();
+      if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -37,48 +56,54 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh]">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg mx-4 bg-surface-primary border border-border-default rounded-xl shadow-cosmic animate-scale-in">
+      <div className="relative w-full max-w-lg mx-4 bg-surface-primary border border-border-default rounded-xl shadow-cosmic animate-scale-in overflow-hidden">
         <div className="flex items-center gap-3 p-4 border-b border-border-default">
-          <svg className="w-5 h-5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 text-text-muted shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
-            autoFocus
+            ref={inputRef}
+            type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search planets, stars, missions..."
-            className="flex-1 bg-transparent text-text-primary outline-none"
+            placeholder="Search modules, planets, stars..."
+            className="flex-1 bg-transparent text-text-primary text-sm outline-none placeholder:text-text-muted"
           />
-          <kbd className="px-2 py-0.5 text-xs bg-surface-glass rounded text-text-muted">ESC</kbd>
+          <kbd className="text-[10px] bg-surface-secondary px-2 py-0.5 rounded text-text-muted">ESC</kbd>
         </div>
 
-        {results.length > 0 && (
-          <div className="max-h-80 overflow-y-auto p-2">
-            {results.map((result) => (
+        <div className="max-h-80 overflow-y-auto p-2">
+          {filtered.length === 0 ? (
+            <div className="text-center py-8 text-text-muted text-sm">No results found</div>
+          ) : (
+            filtered.map((item) => (
               <Link
-                key={result.id}
-                href={result.href}
+                key={item.href}
+                href={item.href}
                 onClick={onClose}
-                className="block px-4 py-3 rounded-lg hover:bg-surface-glass transition-colors"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-glass transition-colors"
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-text-primary">{result.title}</span>
-                  <span className="text-xs text-text-muted capitalize">{result.type}</span>
+                <span className="text-lg">{item.icon}</span>
+                <div className="flex-1">
+                  <div className="text-sm text-text-primary">{item.title}</div>
+                  <div className="text-[10px] text-text-muted">{item.category}</div>
                 </div>
-                <p className="text-xs text-text-secondary mt-1 line-clamp-1">{result.description}</p>
+                <svg className="w-4 h-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
 
-        {query.length > 1 && results.length === 0 && (
-          <div className="p-8 text-center text-text-muted text-sm">No results found</div>
-        )}
+        <div className="p-3 border-t border-border-default text-center">
+          <span className="text-[10px] text-text-muted">
+            {filtered.length} items • Press ESC to close
+          </span>
+        </div>
       </div>
     </div>
   );
 }
-
-export { SearchOverlay };

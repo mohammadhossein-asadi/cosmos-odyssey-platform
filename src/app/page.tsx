@@ -4,21 +4,25 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const features = [
-  { title: "Solar System", description: "Explore all 8 planets in interactive 3D", href: "/solar-system", icon: "🪐", color: "from-plasma-500/20 to-cosmic-500/20" },
-  { title: "Star Catalog", description: "Discover stars with spectral classification", href: "/star-catalog", icon: "⭐", color: "from-star-500/20 to-cosmic-500/20" },
-  { title: "Galaxy Explorer", description: "Journey through galaxies and nebulae", href: "/galaxy-explorer", icon: "🌌", color: "from-aurora-500/20 to-cosmic-500/20" },
-  { title: "Nebula Viewer", description: "Immersive 3D nebula visualization", href: "/nebula-viewer", icon: "☁️", color: "from-nebula-500/20 to-cosmic-500/20" },
-  { title: "Black Holes", description: "Visualize the most extreme objects", href: "/black-hole-visualizer", icon: "🕳️", color: "from-plasma-500/20 to-nebula-500/20" },
-  { title: "Exoplanets", description: "Discover worlds beyond our solar system", href: "/exoplanet-explorer", icon: "🌍", color: "from-aurora-500/20 to-star-500/20" },
-  { title: "Space Travel", description: "Journey between celestial destinations", href: "/space-travel", icon: "🚀", color: "from-star-500/20 to-plasma-500/20" },
-  { title: "Star Chart", description: "Interactive night sky map", href: "/star-chart", icon: "🗺️", color: "from-plasma-500/20 to-star-500/20" },
+  { title: "Solar System", description: "Explore all 8 planets in interactive 3D with orbital animations", href: "/solar-system", icon: "🪐", color: "from-plasma-500/20 to-cosmic-500/20" },
+  { title: "Star Catalog", description: "Discover stars with HR diagram and spectral classification", href: "/star-catalog", icon: "⭐", color: "from-star-500/20 to-cosmic-500/20" },
+  { title: "Galaxy Explorer", description: "Journey through galaxies, nebulae, and deep sky objects", href: "/galaxy-explorer", icon: "🌌", color: "from-aurora-500/20 to-cosmic-500/20" },
+  { title: "Nebula Viewer", description: "Immersive 3D nebula visualization with custom controls", href: "/nebula-viewer", icon: "☁️", color: "from-nebula-500/20 to-cosmic-500/20" },
+  { title: "Black Holes", description: "Visualize accretion disks, jets, and gravitational lensing", href: "/black-hole-visualizer", icon: "🕳️", color: "from-plasma-500/20 to-nebula-500/20" },
+  { title: "Exoplanets", description: "Discover habitable worlds beyond our solar system", href: "/exoplanet-explorer", icon: "🌍", color: "from-aurora-500/20 to-star-500/20" },
+  { title: "Space Travel", description: "Journey between celestial destinations with warp effects", href: "/space-travel", icon: "🚀", color: "from-star-500/20 to-plasma-500/20" },
+  { title: "Star Chart", description: "Interactive night sky map with constellations", href: "/star-chart", icon: "🗺️", color: "from-plasma-500/20 to-star-500/20" },
+  { title: "Galaxy Mapper", description: "Navigate the cosmic web from local groups to universe", href: "/galaxy-mapper", icon: "🔍", color: "from-aurora-500/20 to-nebula-500/20" },
+  { title: "Constellation Map", description: "Explore star patterns and mythology", href: "/constellation-map", icon: "✨", color: "from-star-500/20 to-aurora-500/20" },
+  { title: "Cosmic Timeline", description: "Journey through 13.8 billion years of history", href: "/cosmic-timeline", icon: "⏳", color: "from-plasma-500/20 to-star-500/20" },
+  { title: "Space Missions", description: "Explore the history of human space exploration", href: "/missions", icon: "🛰️", color: "from-aurora-500/20 to-plasma-500/20" },
 ];
 
 const stats = [
   { label: "Planets", value: "8", icon: "🪐" },
-  { label: "Stars", value: "50+", icon: "⭐" },
-  { label: "Galaxies", value: "20+", icon: "🌌" },
-  { label: "Nebulae", value: "15+", icon: "☁️" },
+  { label: "Stars Cataloged", value: "50+", icon: "⭐" },
+  { label: "Galaxies Mapped", value: "25+", icon: "🌌" },
+  { label: "3D Modules", value: "12", icon: "🎮" },
 ];
 
 export default function Home() {
@@ -30,10 +34,9 @@ export default function Home() {
     <main className="min-h-screen">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center min-h-[85vh] text-center px-4 overflow-hidden">
-        {/* Animated background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-b from-cosmic-900 via-cosmic-800 to-cosmic-900" />
-          {mounted && [...Array(100)].map((_, i) => (
+          {mounted && [...Array(150)].map((_, i) => (
             <div
               key={i}
               className="absolute w-px h-px bg-white rounded-full"
@@ -81,7 +84,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
           <svg className="w-6 h-6 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -114,20 +116,20 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {features.map((feature) => (
               <Link
                 key={feature.href}
                 href={feature.href}
-                className="group p-6 rounded-xl bg-surface-primary border border-border-default hover:border-plasma-500/30 transition-all duration-300 hover:shadow-glow-sm"
+                className="group p-5 rounded-xl bg-surface-primary border border-border-default hover:border-plasma-500/30 transition-all duration-300 hover:shadow-glow-sm"
               >
-                <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <span className="text-2xl">{feature.icon}</span>
+                <div className={`w-11 h-11 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                  <span className="text-xl">{feature.icon}</span>
                 </div>
-                <h3 className="text-lg font-semibold text-text-primary mb-2 group-hover:text-plasma-300 transition-colors font-[family-name:var(--font-display)]">
+                <h3 className="text-base font-semibold text-text-primary mb-1.5 group-hover:text-plasma-300 transition-colors font-[family-name:var(--font-display)]">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-text-secondary">{feature.description}</p>
+                <p className="text-xs text-text-secondary leading-relaxed">{feature.description}</p>
               </Link>
             ))}
           </div>
@@ -135,7 +137,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-b from-cosmic-900 via-cosmic-800 to-cosmic-900">
+      <section className="py-16 px-4 bg-gradient-to-b from-cosmic-900 via-cosmic-800 to-cosmic-900">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold font-[family-name:var(--font-display)] mb-4">
             Ready to Explore?
