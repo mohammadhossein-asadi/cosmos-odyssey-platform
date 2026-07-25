@@ -1,0 +1,10 @@
+export const SPEED_OF_LIGHT = 299792458;
+export const AU = 1.496e8;
+export const LIGHT_YEAR = 9.461e12;
+export const PARSEC = 3.086e13;
+export const SOLAR_MASS = 1.989e30;
+export const EARTH_MASS = 5.972e24;
+export const SOLAR_RADIUS = 696340;
+export const EARTH_RADIUS = 6371;
+export const GRAVITATIONAL_CONSTANT = 6.674e-11;
+export const STEFAN_BOLTZMANN = 5.67e-8;
