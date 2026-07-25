@@ -9,6 +9,9 @@ import { BlackHoleDetailPanel } from "./components/BlackHoleDetailPanel";
 import { TimeDilationCalculator } from "./components/TimeDilationCalculator";
 import { BlackHoleTypesGuide } from "./components/BlackHoleTypesGuide";
 import { SpaghettificationGuide } from "./components/SpaghettificationGuide";
+import { MassComparison } from "./components/MassComparison";
+import { BlackHolePhysics } from "./components/BlackHolePhysics";
+import { MultiMessengerGuide } from "./components/MultiMessengerGuide";
 import { blackHoles } from "./data/black-holes";
 import { BlackHoleConfig } from "./types";
 
@@ -122,6 +125,13 @@ function BlackHoleVisualizerPage() {
             <TimeDilationCalculator />
             <SpaghettificationGuide />
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <MassComparison />
+            <BlackHolePhysics />
+          </div>
+
+          <MultiMessengerGuide />
         </div>
       </div>
     </PageContainer>
