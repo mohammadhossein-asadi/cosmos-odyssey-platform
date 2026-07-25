@@ -1,0 +1,1 @@
+export { BlackHolePage } from "./BlackHolePage";
