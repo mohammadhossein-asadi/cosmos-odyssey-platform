@@ -6,13 +6,35 @@ export interface Destination {
   travelTime: string;
   color: string;
   icon: string;
+  diameter?: number;
+  gravity?: number;
+  temperature?: number;
+  atmosphere?: string;
+  funFacts?: string[];
 }
 
-export type TravelStatus = "idle" | "selecting" | "traveling" | "arrived";
+export type TravelPhase = "idle" | "preparing" | "launching" | "warp" | "cruise" | "approaching" | "arrived";
 
 export interface TravelState {
-  status: TravelStatus;
-  from: string | null;
-  to: string | null;
+  phase: TravelPhase;
+  from: string;
+  to: Destination | null;
   progress: number;
+  speed: number;
+  distanceCovered: number;
+  elapsedTime: number;
+}
+
+export interface TravelRecord {
+  id: string;
+  destination: string;
+  date: string;
+  duration: number;
+  distance: number;
+}
+
+export interface TravelConfig {
+  maxSpeed: number;
+  warpMultiplier: number;
+  cruiseSpeed: number;
 }
