@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { useFrame } from "@react-three/fiber";
+import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 interface OrbitLineProps {
@@ -45,7 +44,7 @@ function OrbitLine({
         geometry,
         new THREE.LineBasicMaterial({ color, transparent: true, opacity })
       )
-    } ref={lineRef as any} />
+    } ref={lineRef as unknown as React.Ref<THREE.Line>} />
   );
 }
 

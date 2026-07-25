@@ -13,7 +13,7 @@ function HabitabilityZonesGuide() {
       <CardContent>
         <div className="space-y-3">
           <p className="text-xs text-text-secondary">
-            The habitable zone is the region around a star where liquid water could exist on a planet's surface.
+            The habitable zone is the region around a star where liquid water could exist on a planet&apos;s surface.
           </p>
 
           <div className="bg-surface-glass rounded-lg p-3">
@@ -35,7 +35,7 @@ function HabitabilityZonesGuide() {
           </div>
 
           <div className="text-[10px] text-text-muted">
-            The exact boundaries depend on the star's temperature and luminosity. M-dwarfs have closer habitable zones.
+            The exact boundaries depend on the star&apos;s temperature and luminosity. M-dwarfs have closer habitable zones.
           </div>
         </div>
       </CardContent>
