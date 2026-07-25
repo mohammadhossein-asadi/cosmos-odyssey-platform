@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -49,7 +49,7 @@ function Starfield({
   });
 
   return (
-    <points ref={meshRef as any}>
+    <points ref={meshRef as unknown as React.Ref<THREE.Points>}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"

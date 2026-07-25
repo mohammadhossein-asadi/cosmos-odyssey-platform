@@ -20,7 +20,6 @@ function AnimatedCounter({
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    let start = 0;
     const startTime = performance.now();
 
     const animate = (currentTime: number) => {
