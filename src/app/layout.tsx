@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import { EnhancedHeader } from "@/components/layout/EnhancedHeader";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -33,9 +32,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="antialiased bg-cosmic-900 text-white min-h-screen">
-        <Header />
-        <div className="pt-16">{children}</div>
-        <Footer />
+        <EnhancedHeader />
+        <div className="pt-14">{children}</div>
       </body>
     </html>
   );
