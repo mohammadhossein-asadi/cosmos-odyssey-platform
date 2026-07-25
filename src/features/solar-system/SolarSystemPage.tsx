@@ -5,13 +5,18 @@ import { SolarSystemScene } from "@/components/space/SolarSystemScene";
 import { PlanetSelector } from "@/components/space/PlanetSelector";
 import { PlanetDetailPanel } from "@/components/space/PlanetDetailPanel";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { DwarfPlanetPanel } from "./components/DwarfPlanetPanel";
+import { PlanetComparison } from "./components/PlanetComparison";
+import { PlanetFacts } from "./components/PlanetFacts";
+import { MissionTracker } from "./components/MissionTracker";
 import { usePlanetData } from "./hooks/usePlanetData";
 
 function SolarSystemPage() {
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [orbitSpeed, setOrbitSpeed] = useState(1);
   const [showOrbits, setShowOrbits] = useState(true);
-  const { planets, getNextPlanet, getPrevPlanet } = usePlanetData();
+  const [showLabels, setShowLabels] = useState(false);
+  const { planets, getNextPlanet, getPrevPlanet, totalMoons } = usePlanetData();
 
   const handleSelect = useCallback((id: string) => {
     setSelectedPlanet((prev) => (prev === id ? null : id));
@@ -69,9 +74,19 @@ function SolarSystemPage() {
           >
             Orbits {showOrbits ? "ON" : "OFF"}
           </button>
+          <button
+            onClick={() => setShowLabels(!showLabels)}
+            className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+              showLabels
+                ? "bg-plasma-500/20 border-plasma-500/30 text-plasma-300"
+                : "bg-surface-glass border-border-default text-text-muted"
+            }`}
+          >
+            Labels {showLabels ? "ON" : "OFF"}
+          </button>
         </div>
         <div className="text-xs text-text-muted">
-          {planets.length} planets • Click to explore
+          {planets.length} planets • {totalMoons} moons • Click to explore
         </div>
       </div>
 
@@ -82,6 +97,7 @@ function SolarSystemPage() {
             onPlanetSelect={handleSelect}
             orbitSpeed={orbitSpeed}
             showOrbits={showOrbits}
+            showLabels={showLabels}
           />
         </div>
 
@@ -102,6 +118,16 @@ function SolarSystemPage() {
           />
         </div>
       )}
+
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <PlanetComparison />
+        <DwarfPlanetPanel />
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <PlanetFacts />
+        <MissionTracker />
+      </div>
     </PageContainer>
   );
 }
