@@ -17,7 +17,7 @@ function Starfield({
   size = 0.5,
   color = "#ffffff",
 }: StarfieldProps) {
-  const meshRef = useRef<THREE.Points>();
+  const meshRef = useRef<THREE.Points>(null);
 
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);

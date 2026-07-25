@@ -3,7 +3,7 @@ export interface Asteroid {
   name: string;
   diameter: number;
   orbit: number;
-  type: "C" | "S" | "M";
+  type: "C" | "S" | "M" | "V" | "B";
 }
 
 export const asteroidBelt: Asteroid[] = [

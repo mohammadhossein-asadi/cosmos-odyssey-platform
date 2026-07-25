@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useRef, useEffect } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 interface OrbitLineProps {
@@ -16,24 +17,35 @@ function OrbitLine({
   opacity = 0.3,
   segments = 128,
 }: OrbitLineProps) {
-  const points = useMemo(() => {
-    const pts: THREE.Vector3[] = [];
+  const lineRef = useRef<THREE.Line>(null);
+
+  useEffect(() => {
+    if (!lineRef.current) return;
+    const points: THREE.Vector3[] = [];
     for (let i = 0; i <= segments; i++) {
       const angle = (i / segments) * Math.PI * 2;
-      pts.push(new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius));
+      points.push(new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius));
     }
-    return pts;
+    const geo = new THREE.BufferGeometry().setFromPoints(points);
+    lineRef.current.geometry.dispose();
+    lineRef.current.geometry = geo;
   }, [radius, segments]);
 
-  const lineGeometry = useMemo(() => {
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    return geometry;
-  }, [points]);
+  useEffect(() => {
+    if (lineRef.current) {
+      (lineRef.current.material as THREE.LineBasicMaterial).opacity = opacity;
+    }
+  }, [opacity]);
+
+  const geometry = useRef(new THREE.BufferGeometry()).current;
 
   return (
-    <line geometry={lineGeometry}>
-      <lineBasicMaterial color={color} transparent opacity={opacity} />
-    </line>
+    <primitive object={
+      new THREE.Line(
+        geometry,
+        new THREE.LineBasicMaterial({ color, transparent: true, opacity })
+      )
+    } ref={lineRef as any} />
   );
 }
 

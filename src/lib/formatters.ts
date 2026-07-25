@@ -34,3 +34,14 @@ export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength - 3) + "...";
 }
+
+export function formatDistance(km: number): string {
+  if (km >= 1e9) return (km / 1e9).toFixed(2) + " billion km";
+  if (km >= 1e6) return (km / 1e6).toFixed(1) + " million km";
+  if (km >= 1e3) return (km / 1e3).toFixed(0) + ",000 km";
+  return km.toLocaleString() + " km";
+}
+
+export function formatTemperature(celsius: number): string {
+  return `${celsius}°C / ${Math.round(celsius * 9 / 5 + 32)}°F`;
+}

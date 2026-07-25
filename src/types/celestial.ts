@@ -56,6 +56,7 @@ export interface Star extends CelestialBody {
   distance: number;
   magnitude: number;
   constellation?: string;
+  funFacts: string[];
 }
 
 export interface Asteroid extends CelestialBody {
