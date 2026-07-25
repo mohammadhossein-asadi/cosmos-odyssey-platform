@@ -1,13 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { GalaxyMapperScene } from "./components/GalaxyMapperScene";
 import { MapperControls } from "./components/MapperControls";
 import { ClusterInfoPanel } from "./components/ClusterInfoPanel";
+import { GalaxyInfoPanel } from "./components/GalaxyInfoPanel";
+import { GalaxySearch } from "./components/GalaxySearch";
+import { ClusterStats } from "./components/ClusterStats";
 import { DistanceScale } from "./components/DistanceScale";
 import { ScaleInfo } from "./components/ScaleInfo";
-import { MapState, MapScale } from "./types";
+import { localGroupGalaxies, virgoClusterGalaxies, comaClusterGalaxies } from "./data/galaxies";
+import { MapState, MapScale, GalaxyPosition } from "./types";
 
 function GalaxyMapperPage() {
   const [state, setState] = useState<MapState>({
@@ -19,7 +23,12 @@ function GalaxyMapperPage() {
     showFilaments: true,
     showLabels: true,
     rotationSpeed: 0.02,
+    search: "",
+    filterType: "all",
   });
+
+  const allGalaxies = useMemo(() => [...localGroupGalaxies, ...virgoClusterGalaxies, ...comaClusterGalaxies], []);
+  const selectedGalaxyData = useMemo(() => allGalaxies.find((g) => g.id === state.selectedGalaxy), [allGalaxies, state.selectedGalaxy]);
 
   const handleStateChange = useCallback((partial: Partial<MapState>) => {
     setState((prev) => ({ ...prev, ...partial }));
@@ -33,6 +42,13 @@ function GalaxyMapperPage() {
     setState((prev) => ({ ...prev, selectedCluster: prev.selectedCluster === id ? null : id }));
   }, []);
 
+  const scales: { id: MapScale; label: string; description: string; icon: string }[] = [
+    { id: "local-group", label: "Local Group", description: "10 Mly • 50+ galaxies", icon: "🌍" },
+    { id: "virgo-supercluster", label: "Virgo Supercluster", description: "110 Mly • 100,000+ galaxies", icon: "🌌" },
+    { id: "cosmic-web", label: "Cosmic Web", description: "Billions of ly • Billions of galaxies", icon: "🕸️" },
+    { id: "observable-universe", label: "Observable Universe", description: "93 Gly • 2 trillion+ galaxies", icon: "🔭" },
+  ];
+
   return (
     <PageContainer>
       <div className="flex items-center justify-between mb-4">
@@ -43,6 +59,9 @@ function GalaxyMapperPage() {
           <p className="text-text-secondary text-xs mt-1">
             Navigate the cosmic web from local groups to the observable universe
           </p>
+        </div>
+        <div className="w-48">
+          <GalaxySearch onSelect={handleGalaxySelect} selectedGalaxy={state.selectedGalaxy} />
         </div>
       </div>
 
@@ -59,38 +78,42 @@ function GalaxyMapperPage() {
         <DistanceScale scale={state.scale} />
         <ScaleInfo scale={state.scale} />
 
-        {state.selectedCluster && (
+        {selectedGalaxyData && (
+          <div className="absolute top-4 right-4">
+            <GalaxyInfoPanel galaxy={selectedGalaxyData} onClose={() => handleStateChange({ selectedGalaxy: null })} />
+          </div>
+        )}
+
+        {state.selectedCluster && !selectedGalaxyData && (
           <div className="absolute bottom-4 right-4">
-            <ClusterInfoPanel
-              clusterId={state.selectedCluster}
-              onClose={() => handleStateChange({ selectedCluster: null })}
-            />
+            <ClusterInfoPanel clusterId={state.selectedCluster} onClose={() => handleStateChange({ selectedCluster: null })} />
           </div>
         )}
       </div>
 
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-        {(["local-group", "virgo-supercluster", "cosmic-web", "observable-universe"] as MapScale[]).map((s) => (
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-5 gap-3">
+        {scales.map((s) => (
           <button
-            key={s}
-            onClick={() => handleStateChange({ scale: s })}
+            key={s.id}
+            onClick={() => handleStateChange({ scale: s.id })}
             className={`p-3 rounded-xl border text-left transition-all ${
-              state.scale === s
+              state.scale === s.id
                 ? "bg-plasma-500/10 border-plasma-500/30"
                 : "bg-surface-primary border-border-default hover:border-plasma-500/20"
             }`}
           >
-            <div className="text-xs font-semibold text-text-primary capitalize font-[family-name:var(--font-display)]">
-              {s.replace("-", " ")}
-            </div>
-            <div className="text-[10px] text-text-muted mt-0.5">
-              {s === "local-group" && "10 Mly • 50+ galaxies"}
-              {s === "virgo-supercluster" && "110 Mly • 100,000+ galaxies"}
-              {s === "cosmic-web" && "Billions of ly • Billions of galaxies"}
-              {s === "observable-universe" && "93 Gly • 2 trillion+ galaxies"}
+            <div className="flex items-center gap-2">
+              <span className="text-lg">{s.icon}</span>
+              <div>
+                <div className="text-xs font-semibold text-text-primary font-[family-name:var(--font-display)]">{s.label}</div>
+                <div className="text-[10px] text-text-muted">{s.description}</div>
+              </div>
             </div>
           </button>
         ))}
+        <div className="hidden md:block">
+          <ClusterStats />
+        </div>
       </div>
     </PageContainer>
   );
