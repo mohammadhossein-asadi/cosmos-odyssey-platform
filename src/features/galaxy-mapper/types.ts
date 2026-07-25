@@ -13,6 +13,8 @@ export interface GalaxyPosition {
   magnitude: number;
   color: string;
   size: number;
+  constellation?: string;
+  description?: string;
 }
 
 export interface GalaxyCluster {
@@ -25,6 +27,7 @@ export interface GalaxyCluster {
   distance: number;
   description: string;
   color: string;
+  galaxyCount?: number;
 }
 
 export interface CosmicStructure {
@@ -53,4 +56,6 @@ export interface MapState {
   showFilaments: boolean;
   showLabels: boolean;
   rotationSpeed: number;
+  search: string;
+  filterType: string;
 }
