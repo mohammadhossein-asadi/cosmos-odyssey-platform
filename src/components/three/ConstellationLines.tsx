@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 interface ConstellationLinesProps {
@@ -10,31 +10,49 @@ interface ConstellationLinesProps {
 }
 
 function ConstellationLines({ points, color = "#7c5cbf", opacity = 0.5 }: ConstellationLinesProps) {
-  const lines = useMemo(() => {
-    return points.map(([startIdx, endIdx]) => {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useEffect(() => {
+    if (!groupRef.current) return;
+
+    while (groupRef.current.children.length > 0) {
+      const child = groupRef.current.children[0];
+      groupRef.current.remove(child);
+      if (child instanceof THREE.Line) {
+        child.geometry.dispose();
+        (child.material as THREE.Material).dispose();
+      }
+    }
+
+    for (const [startIdx, endIdx] of points) {
       const start = points[startIdx];
       const end = points[endIdx];
-      if (!start || !end) return null;
-      return [
+      if (!start || !end) continue;
+
+      const geo = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(start[0] * 10, start[1] * 10, 0),
         new THREE.Vector3(end[0] * 10, end[1] * 10, 0),
-      ];
-    }).filter(Boolean);
-  }, [points]);
+      ]);
+      const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity });
+      const line = new THREE.Line(geo, mat);
+      groupRef.current.add(line);
+    }
 
-  return (
-    <group>
-      {lines.map((line, i) => {
-        if (!line) return null;
-        const geometry = new THREE.BufferGeometry().setFromPoints(line);
-        return (
-          <line key={i} geometry={geometry}>
-            <lineBasicMaterial color={color} transparent opacity={opacity} />
-          </line>
-        );
-      })}
-    </group>
-  );
+    return () => {
+      if (groupRef.current) {
+        while (groupRef.current.children.length > 0) {
+          const child = groupRef.current.children[0];
+          groupRef.current.remove(child);
+          if (child instanceof THREE.Line) {
+            child.geometry.dispose();
+            (child.material as THREE.Material).dispose();
+          }
+        }
+      }
+    };
+  }, [points, color, opacity]);
+
+  return <group ref={groupRef} />;
 }
 
 export { ConstellationLines };
