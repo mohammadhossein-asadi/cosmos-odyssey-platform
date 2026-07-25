@@ -1,50 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { DestinationGrid } from "./components/DestinationGrid";
 import { TravelStats } from "./components/TravelStats";
 import { TravelSequence } from "./components/TravelSequence";
+import { ArrivalPanel } from "./components/ArrivalPanel";
+import { TravelHistory } from "./components/TravelHistory";
+import { useTravelState } from "./hooks/useTravelState";
+import { destinations } from "./data/destinations";
 import { Destination } from "./types";
 
-const destinations: Destination[] = [
-  { id: "moon", name: "The Moon", description: "Earth's closest companion, 384,400 km away.", distance: 384400, travelTime: "3 days", color: "#c0c0c0", icon: "🌙" },
-  { id: "mars", name: "Mars", description: "The Red Planet, our next frontier.", distance: 225000000, travelTime: "7 months", color: "#c1440e", icon: "🔴" },
-  { id: "jupiter", name: "Jupiter", description: "The gas giant king with its Great Red Spot.", distance: 628730000, travelTime: "2.7 years", color: "#c88b3a", icon: "🟠" },
-  { id: "saturn", name: "Saturn", description: "Famous for its stunning ring system.", distance: 1200000000, travelTime: "7 years", color: "#e4c46e", icon: "🪐" },
-  { id: "neptune", name: "Neptune", description: "The windiest planet in the solar system.", distance: 4300000000, travelTime: "12 years", color: "#4b70dd", icon: "🔵" },
-  { id: "pluto", name: "Pluto", description: "The dwarf planet at the edge of the solar system.", distance: 5900000000, travelTime: "15 years", color: "#c4a882", icon: "⚫" },
-];
-
 function SpaceTravelPage() {
-  const [selectedDestination, setSelectedDestination] = useState<string | null>(null);
-  const [isTraveling, setIsTraveling] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [showArrival, setShowArrival] = useState(false);
+  const { phase, progress, speed, distanceCovered, startTravel, cancelTravel, travelHistory } = useTravelState();
 
-  const handleSelect = (id: string) => {
-    setSelectedDestination(id);
-    setIsTraveling(true);
-  };
+  const uniqueVisited = new Set(travelHistory.map((r) => r.destination)).size;
+
+  const handleSelect = useCallback((id: string) => {
+    const dest = destinations.find((d) => d.id === id);
+    if (dest) {
+      setSelectedDestination(dest);
+      startTravel(dest);
+    }
+  }, [startTravel]);
+
+  const handleComplete = useCallback(() => {
+    setShowArrival(true);
+  }, []);
+
+  const handleReturn = useCallback(() => {
+    setSelectedDestination(null);
+    setShowArrival(false);
+    cancelTravel();
+  }, [cancelTravel]);
+
+  useEffect(() => {
+    if (phase === "arrived" && !showArrival) {
+      const timer = setTimeout(() => setShowArrival(true), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, showArrival]);
+
+  const isTraveling = phase !== "idle";
 
   return (
     <PageContainer>
-      <div className="text-center mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold font-[family-name:var(--font-display)] mb-4 bg-gradient-to-r from-aurora-400 to-plasma-300 bg-clip-text text-transparent">
+      <div className="text-center mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold font-[family-name:var(--font-display)] mb-3 bg-gradient-to-r from-aurora-400 via-plasma-300 to-star-400 bg-clip-text text-transparent">
           Space Travel
         </h1>
-        <p className="text-text-secondary max-w-2xl mx-auto">
+        <p className="text-text-secondary max-w-xl mx-auto text-sm">
           Choose your destination and begin your journey through the cosmos.
         </p>
       </div>
 
-      <TravelStats />
+      <TravelStats
+        totalJourneys={travelHistory.length}
+        destinationsVisited={uniqueVisited}
+      />
 
       {isTraveling && selectedDestination ? (
-        <TravelSequence
-          destination={destinations.find((d) => d.id === selectedDestination)!}
-          onComplete={() => setIsTraveling(false)}
-        />
+        showArrival && phase === "arrived" ? (
+          <div className="flex flex-col items-center gap-6">
+            <TravelSequence
+              destination={selectedDestination}
+              progress={progress}
+              phase={phase}
+              speed={speed}
+              distanceCovered={distanceCovered}
+              onCancel={handleReturn}
+            />
+            <ArrivalPanel
+              destination={selectedDestination}
+              record={travelHistory[0]}
+              onClose={handleReturn}
+            />
+          </div>
+        ) : (
+          <TravelSequence
+            destination={selectedDestination}
+            progress={progress}
+            phase={phase}
+            speed={speed}
+            distanceCovered={distanceCovered}
+            onCancel={handleReturn}
+          />
+        )
       ) : (
-        <DestinationGrid destinations={destinations} onSelect={handleSelect} />
+        <div className="space-y-8">
+          <DestinationGrid destinations={destinations} onSelect={handleSelect} />
+          {travelHistory.length > 0 && (
+            <TravelHistory records={travelHistory} />
+          )}
+        </div>
       )}
     </PageContainer>
   );

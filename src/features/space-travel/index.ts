@@ -1,4 +1,11 @@
 export { SpaceTravelPage } from "./SpaceTravelPage";
 export { TravelSequence } from "./components/TravelSequence";
 export { DestinationGrid } from "./components/DestinationGrid";
-export type { Destination, TravelStatus, TravelState } from "./types";
+export { TravelStats } from "./components/TravelStats";
+export { TravelHUD } from "./components/TravelHUD";
+export { WarpTunnel } from "./components/WarpTunnel";
+export { Spacecraft } from "./components/Spacecraft";
+export { ArrivalPanel } from "./components/ArrivalPanel";
+export { TravelHistory } from "./components/TravelHistory";
+export { useTravelState } from "./hooks/useTravelState";
+export type { Destination, TravelPhase, TravelState, TravelRecord } from "./types";

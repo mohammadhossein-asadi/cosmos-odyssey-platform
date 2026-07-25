@@ -1,19 +1,25 @@
 "use client";
 
-function TravelStats() {
+interface TravelStatsProps {
+  totalJourneys?: number;
+  destinationsVisited?: number;
+  totalDistance?: number;
+}
+
+function TravelStats({ totalJourneys = 0, destinationsVisited = 0, totalDistance = 0 }: TravelStatsProps) {
   const stats = [
-    { label: "Destinations", value: "8", icon: "🌍" },
-    { label: "Avg Distance", value: "150M km", icon: "📏" },
-    { label: "Travel Routes", value: "24", icon: "🚀" },
+    { label: "Destinations", value: "8", icon: "🌍", color: "from-plasma-500/20 to-cosmic-500/20" },
+    { label: "Journeys Taken", value: totalJourneys.toString(), icon: "🚀", color: "from-aurora-500/20 to-cosmic-500/20" },
+    { label: "Planets Visited", value: destinationsVisited.toString(), icon: "⭐", color: "from-star-500/20 to-cosmic-500/20" },
   ];
 
   return (
     <div className="grid grid-cols-3 gap-4 mb-8">
       {stats.map((stat) => (
-        <div key={stat.label} className="text-center p-4 rounded-lg bg-surface-glass border border-border-default">
-          <div className="text-2xl mb-1">{stat.icon}</div>
-          <div className="text-lg font-bold text-text-primary">{stat.value}</div>
-          <div className="text-xs text-text-muted">{stat.label}</div>
+        <div key={stat.label} className="text-center p-4 rounded-xl bg-surface-glass border border-border-default">
+          <div className="text-2xl mb-2">{stat.icon}</div>
+          <div className="text-xl font-bold text-text-primary font-[family-name:var(--font-display)]">{stat.value}</div>
+          <div className="text-[10px] text-text-muted uppercase tracking-wider mt-1">{stat.label}</div>
         </div>
       ))}
     </div>
