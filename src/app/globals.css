@@ -2,6 +2,7 @@
 @import "../styles/theme.css";
 @import "../styles/typography.css";
 @import "../styles/animations.css";
+@import "../styles/fonts.css";
 
 :root {
   --background: #030014;
