@@ -26,3 +26,12 @@ export function isEmpty(value: unknown): boolean {
   if (typeof value === "object") return Object.keys(value).length === 0;
   return false;
 }
+
+export function isValidPlanetId(id: string): boolean {
+  const validIds = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"];
+  return validIds.includes(id);
+}
+
+export function isInRange(value: number, min: number, max: number): boolean {
+  return value >= min && value <= max;
+}
