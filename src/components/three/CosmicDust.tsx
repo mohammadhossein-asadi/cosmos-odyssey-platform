@@ -1,0 +1,59 @@
+"use client";
+
+import { useRef, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+
+interface CosmicDustProps {
+  count?: number;
+  spread?: number;
+  color?: string;
+  speed?: number;
+  size?: number;
+}
+
+function CosmicDust({
+  count = 200,
+  spread = 30,
+  color = "#7c5cbf",
+  speed = 0.02,
+  size = 0.05,
+}: CosmicDustProps) {
+  const meshRef = useRef<THREE.Points>(null);
+
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * spread;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * spread;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * spread;
+    }
+    return pos;
+  }, [count, spread]);
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = state.clock.elapsedTime * speed;
+      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.05;
+    }
+  });
+
+  return (
+    <points ref={meshRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} count={count} itemSize={3} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={size}
+        color={color}
+        transparent
+        opacity={0.4}
+        sizeAttenuation
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  );
+}
+
+export { CosmicDust };
