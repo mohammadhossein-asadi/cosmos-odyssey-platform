@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cosmos Odyssey
+
+An immersive interactive space exploration and astronomy experience platform. Explore the universe through cutting-edge 3D visualizations and interactive experiences.
+
+## Features
+
+- **Solar System Explorer** - Interactive 3D solar system with all 8 planets
+- **Space Travel** - Animated journey between celestial bodies
+- **Star Explorer** - Interactive star map with constellation data
+- **Encyclopedia** - Detailed planet information and comparisons
+- **Black Hole Experience** - Visualize extreme cosmic phenomena
+- **Cosmic Timeline** - Journey through 13.8 billion years of history
+- **Space Missions** - Explore the history of space exploration
+- **User Profile** - Track your exploration achievements
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **UI**: React 19, TypeScript, Tailwind CSS v4
+- **3D**: Three.js, React Three Fiber, Drei
+- **Animation**: GSAP
+- **Testing**: Vitest
+- **CI/CD**: GitHub Actions
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/              # Next.js App Router pages
+  components/       # Reusable UI components
+    ui/             # Base UI (Button, Card, Modal, etc.)
+    space/          # Space-specific components
+    layout/         # Layout components
+    three/          # Three.js/R3F components
+  features/         # Feature modules
+  data/             # Static celestial data
+  hooks/            # Custom React hooks
+  lib/              # Utilities and helpers
+  styles/           # Global CSS and themes
+  types/            # TypeScript interfaces
+```
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
