@@ -49,7 +49,7 @@ function Starfield({
   });
 
   return (
-    <points ref={meshRef as unknown as React.Ref<THREE.Points>}>
+    <points ref={meshRef}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
