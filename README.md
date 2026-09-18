@@ -6,6 +6,7 @@
 
 An immersive 3D space exploration platform built with Next.js 15, React Three Fiber, Three.js, and GSAP — featuring real-time celestial rendering, interactive orbital mechanics, and cinematic space navigation.
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-cosmos--odyssey--platform--phi.vercel.app-0a0a0a?style=for-the-badge&labelColor=0a0a0a&color=3b82f6)](https://cosmos-odyssey-platform-phi.vercel.app/)
 [![Next.js 15](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript_5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
